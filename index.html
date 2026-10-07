@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width">
+<title>Weltrade Demo</title>
+<style>
+body{background:#0f172a;color:#fff;font-family:Arial;padding:15px}
+.header{display:flex;justify-content:space-between;background:#1e293b;padding:12px;border-radius:12px;margin-bottom:15px}
+.logo{font-weight:900;color:#22c55e}
+.balance span{color:#22c55e}
+.pairs{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px}
+.pair{padding:8px 14px;background:#1e293b;border-radius:20px;border:1px solid #334155}
+.pair.active{background:#22c55e;color:#000}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}
+.btn{padding:16px;border:none;border-radius:12px;font-weight:900}
+.buy{background:#22c55e} .sell{background:#ef4444;color:#fff}
+.input{width:100%;padding:12px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;margin:6px 0}
+.submit{width:100%;padding:14px;background:#22c55e;border:none;border-radius:10px;font-weight:900;margin-top:10px}
+</style></head>
+<body>
+<div class="header"><div class="logo">WELTRADE DEMO</div><div>Balance: $<span id="bal">5000.00</span></div></div>
+<div class="pairs"><div class="pair active">EUR/USD</div><div class="pair">GOLD</div><div class="pair">BTC/USD</div></div>
+<div id="chart" style="background:#1e293b;height:200px;border-radius:12px;padding:15px;margin-bottom:12px;display:flex;align-items:end;gap:4px"></div>
+<div class="btns"><button class="btn buy" onclick="alert('BUY Demo - No real trade')">BUY ↑</button><button class="btn sell" onclick="alert('SELL Demo - No real trade')">SELL ↓</button></div>
+<input class="input" id="name" placeholder="Your name">
+<input class="input" id="phone" placeholder="WhatsApp 256...">
+<button class="submit" onclick="alert('Lead saved! Manager will contact you on '+document.getElementById('phone').value)">GET $50 BONUS</button>
+<p style="font-size:11px;color:#94a3b8;text-align:center;margin-top:8px">Demo $5000 virtual. App does NOT auto-trade. Telegram leads only.</p>
+<script>
+let c=document.getElementById('chart');let h='';for(let i=0;i<35;i++){let ht=20+Math.random()*120;let col=Math.random()>0.5?'#22c55e':'#ef4444';h+=`<div style="width:7px;height:${ht}px;background:${col};border-radius:2px"></div>`}c.innerHTML=h;
+</script>
+</body></html>
