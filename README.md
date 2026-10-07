@@ -1,1 +1,260 @@
-# weltrade-demo
+# weltrade-demoBuild a mobile-first web app called “Weltrade Reversal Signal”.
+
+IMPORTANT:
+This is a SIGNAL-ONLY application. NEVER place, modify, or close trades. Do not use OrderSend, CTrade, or any automatic trading function.
+
+The app is designed for Android phones and must have a clean, simple, fast interface.
+
+BROKER / SYMBOLS
+The app is intended for Weltrade MT5 synthetic markets and must support ONLY these symbols:
+
+MAX GainX 2000
+MAX PainX 2000
+PainX 1200
+PainX 600
+PainX 800
+PainX 999
+GainX 600
+GainX 800
+GainX 999
+GainX 1200
+GainX 400
+MAX GainX 1000
+MAX PainX 1000
+PainX 400
+
+Reject unsupported symbols.
+
+IMPORTANT DATA REQUIREMENT:
+Do not invent, simulate, or fabricate market prices or signals. The application must use a real available market-data connection. If direct Weltrade MT5 market data cannot be accessed from a browser, clearly show “DATA CONNECTION REQUIRED” rather than generating fake signals. Design the data layer so an appropriate real-time API/WebSocket/MT5 bridge can be connected later.
+
+TIMEFRAMES
+The mandatory confirmation timeframes are:
+
+M1
+M2
+M3
+M4
+M5
+M15
+M20
+M30
+M45
+H1
+
+All 10 timeframes must agree for a CONFIRMED signal.
+
+9/10 is NOT confirmed.
+
+M45 must be constructed internally from lower-timeframe data if the data provider does not supply native M45 candles. Do not require the user to have a native M45 chart.
+
+INDICATOR WINDOW 1
+
+RSI:
+- Period: 10
+- Applied price: Typical Price (HLC/3)
+- Important levels: 0, 10, 50, 90, 100
+- BUY zone: RSI 0–10
+- SELL zone: RSI 90–100
+- TP1 reference: RSI 50
+- Do NOT add RSI 20 or RSI 80.
+
+ALLIGATOR:
+GREEN LINE 1:
+- Teeth period: 7
+- Teeth shift: 0
+- Lips period: 1000
+- Lips shift: 800
+- Method: Linear Weighted
+- Applied price: Weighted Close (HLCC/4)
+
+BEARS POWER:
+- Period: 80,000
+- Use only as an additional confirmation/filter.
+- It must never override the core Alligator + Ichimoku + 10-timeframe rules.
+
+INDICATOR WINDOW 2
+
+ICHIMOKU:
+GREEN LINE 2:
+- Tenkan-sen: 1
+- Kijun-sen: 1
+- Senkou Span B: 1
+- Cloud fill: OFF
+
+Use the actual numerical indicator values, not screenshots or pixel analysis.
+
+CORE BUY LOGIC
+
+A BUY setup occurs when:
+
+1. Alligator GREEN LINE 1 reaches/touches the BUY extreme zone (0–10).
+2. Ichimoku GREEN LINE 2 reaches/touches the BUY extreme zone (0–10).
+3. The required timeframe conditions agree.
+4. When all 10 mandatory timeframes agree, generate BUY CONFIRMED.
+
+CORE SELL LOGIC
+
+A SELL setup occurs when:
+
+1. Alligator GREEN LINE 1 reaches/touches the SELL extreme zone (90–100).
+2. Ichimoku GREEN LINE 2 reaches/touches the SELL extreme zone (90–100).
+3. The required timeframe conditions agree.
+4. When all 10 mandatory timeframes agree, generate SELL CONFIRMED.
+
+SIGNAL STRENGTH
+
+EARLY:
+A developing setup before full confirmation.
+
+STRONG:
+Most required conditions/timeframes agree, but not all 10.
+
+CONFIRMED:
+All 10 mandatory timeframes agree.
+
+Never call 9/10 CONFIRMED.
+
+SIGNAL TIMING
+
+The app may display EARLY signals while the current candle is forming.
+
+CONFIRMED signals must use CLOSED candles and must not repaint.
+
+Once a confirmed signal is generated, its marker must remain fixed at the exact candle/time where it occurred.
+
+Do not move signals when the user zooms, scrolls, or changes the chart.
+
+DUPLICATE SIGNAL PROTECTION
+
+Only generate one signal per reversal event.
+
+After a BUY signal, do not repeatedly generate BUY signals while the setup remains in the BUY extreme zone.
+
+The setup must leave the extreme zone before another BUY reversal can be generated.
+
+Same rule for SELL.
+
+Connection recovery must not duplicate an already generated signal.
+
+CHART
+
+Create a clean mobile chart showing:
+- Candles
+- BUY arrows
+- SELL arrows
+- Signal strength
+- Signal time
+- Current symbol
+- Current timeframe
+- Confirmation count, e.g. 10/10
+
+Do not clutter the chart with unnecessary indicators.
+
+The main visual focus should be the BUY/SELL arrows.
+
+SIGNAL PANEL
+
+Create a mobile dashboard showing:
+
+SYMBOL
+CURRENT PRICE
+CURRENT SIGNAL
+SIGNAL STRENGTH
+TIMEFRAME AGREEMENT
+RSI
+TP1 = RSI 50
+BUY INVALIDATION = RSI 0
+SELL INVALIDATION = RSI 100
+DATA CONNECTION STATUS
+
+Show:
+🟢 BUY
+🔴 SELL
+🟡 EARLY
+🟠 STRONG
+🔵 CONFIRMED
+⚪ WAITING
+
+NOTIFICATIONS
+
+When a new confirmed signal appears, send a browser/mobile notification if the device/browser permits notifications.
+
+Notification example:
+
+BUY CONFIRMED
+Symbol: GainX 600
+Agreement: 10/10
+TP1: RSI 50
+Invalidation: RSI 0
+
+SELL CONFIRMED
+Symbol: PainX 600
+Agreement: 10/10
+TP1: RSI 50
+Invalidation: RSI 100
+
+Do not send repeated notifications for the same reversal.
+
+SETTINGS
+
+Allow the user to:
+- Select supported symbol
+- Enable/disable notifications
+- Show/hide EARLY signals
+- Show/hide STRONG signals
+- Show/hide CONFIRMED signals
+- Enable/disable sound
+- Choose light/dark mode
+
+SAFETY
+
+This application must NEVER execute trades.
+
+No:
+OrderSend
+CTrade
+automatic BUY orders
+automatic SELL orders
+stop-loss orders
+take-profit orders
+trade modification
+trade closing
+
+It is strictly a market-analysis and signal application.
+
+TECHNICAL REQUIREMENTS
+
+Build it as a responsive mobile-first web application that works well on Android Chrome.
+
+Use a clean professional trading interface.
+
+The app must handle missing/insufficient market data safely.
+
+If there is not enough data to calculate an indicator, show WAITING FOR DATA.
+
+Never fabricate a signal.
+
+Use numerical calculations for RSI, Alligator and Ichimoku.
+
+Do not use image recognition or screenshot analysis.
+
+Create the application so the market-data provider/API can be changed later without rewriting the signal engine.
+
+Most importantly:
+Do not claim a signal is real unless the underlying market data is real and current.
+Do not create fake/demo signals in production mode.
+
+Before considering the build complete, test:
+- Symbol validation
+- All 10 timeframe agreement
+- BUY logic
+- SELL logic
+- 10/10 confirmation
+- 9/10 rejection
+- Closed-candle confirmation
+- Duplicate-signal prevention
+- Notification logic
+- Missing-data handling
+- M45 aggregation
+- Mobile responsiveness
